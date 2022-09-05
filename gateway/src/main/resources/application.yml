@@ -1,0 +1,23 @@
+server:
+  port: 8765
+  
+spring:
+  application:
+    name: cloudgateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            maxAge: 10
+            allowed-origins: 
+            - http://localhost:3000'
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allow-credentials: true

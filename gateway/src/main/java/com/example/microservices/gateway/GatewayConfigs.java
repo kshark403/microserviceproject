@@ -1,0 +1,41 @@
+package com.example.microservices.gateway;
+
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@Configuration
+public class GatewayConfigs {
+	
+	
+	@Bean
+	public RouteLocator getwayRourter(RouteLocatorBuilder builder) {
+		return builder.routes()
+				.route(p -> p
+						.path("/get")
+						.filters(f -> f
+								.addRequestHeader("header1", "praveen")
+								.addRequestHeader("header2", "kumar")
+								.addRequestParameter("Param1", "Hyderabad")
+								.addRequestParameter("Param2", "Chennai"))
+						.uri("http://httpbin.org:80"))
+				
+				.route(p -> p
+						.path("/post")
+						.filters(f -> f
+								.addRequestHeader("header10", "myheader10")
+								.addRequestParameter("param10", "Chennai10"))
+						.uri("http://httpbin.org:80"))
+						
+				.route(p->p.path("/notes/**").uri("lb://noteservice/notes"))
+				.route(p->p.path("/comments/**").uri("lb://commentservice/comments"))
+				.route(p->p.path("/customer/**").uri("lb://customerservice/customer"))
+				.route(p->p.path("/branch/**").uri("lb://branchservice/branch"))
+				.route(p->p.path("/account/**").uri("lb://accountservice/account"))
+				.route(p->p.path("/trans/**").uri("lb://transactionservice/trans"))
+				.build();
+	}
+
+}
